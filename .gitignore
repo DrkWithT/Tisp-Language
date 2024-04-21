@@ -1,0 +1,10 @@
+.DS_Store
+.git
+.vscode
+bin
+build
+CMakeFiles
+Testing
+
+CMakeCache.txt
+Makefile

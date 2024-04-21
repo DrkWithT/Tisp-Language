@@ -1,0 +1,38 @@
+# Grammar
+
+### "New" Features
+ - typenames are all uppercase to reduce word ambiguity!
+ - "$" operator is for invoking functions.
+ - "@" operator is for accessing something in a sequence.
+
+### Rules: (expr, stmts)
+```bnf
+comment ::= "#" ... "#"
+
+literal ::= Boolean | Integer | Double | String | Sequence | Nil | identifier
+unary ::= ("$" | "-" | "@") "(" literal (expr)* ")"
+factor ::= unary (("*" | "/") unary)*
+term ::= factor (("+" | "-") factor)*
+compare ::= term (("==" | "!=" | ">" | "<") term)
+conditional ::= compare (("&&" | "||") compare)*
+expr = conditional
+
+typename = "Boolean" | "Integer" | "Double" | "String" | "Seq" | "Nil" | adt
+adt = ... ; identifier with uppercase first letter!
+
+variable ::= constant | mutable
+constant ::= "const" identifier ":" typename expr
+mutable ::= "var" identifier ":" typename expr
+mutation ::= identifier "=" expr
+defun ::= "defun" identifier "(" param* ")" "->" typename block
+param ::= identifier ":" typename
+block ::= "{" (inner)+ "}"
+inner ::= variable | mutation | defun | match | while | return
+match ::= "match" (identifier)* "{" ("case" expr block)* ("default" block) "}"
+return ::= "return" expr
+while ::= "while" expr block
+outer ::= variable | defun | generic | import
+generic ::= "generic" "(" (identifier)* ")" defun
+substitution ::= identifier "(" (typename)* ")"
+import ::= "use" identifier ("." identifier)
+```
