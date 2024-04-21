@@ -1,0 +1,13 @@
+# test03.tisp #
+
+use io.print
+
+generic (N)
+defun addAny (x:N y:N) -> N {
+    return x + y
+}
+
+defun main () -> int {
+    $(print $(addAny(int) 50 50))
+    return 0
+}

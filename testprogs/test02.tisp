@@ -1,0 +1,19 @@
+# test02.tisp #
+
+use io.print
+
+defun doFactorial (n : Integer) -> Integer {
+    match n {
+        case n <= 1 {
+            return 1
+        }
+        default {
+            return n * $(doFactorial (n - 1))
+        }
+    }
+}
+
+defun main () -> Integer {
+    $(print $(doFactorial 4))
+    return 0
+}

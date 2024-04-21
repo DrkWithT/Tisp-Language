@@ -1,0 +1,23 @@
+# test01 #
+
+use io.print
+
+const nums : Seq [1, 2, 3, 4]
+
+defun accumulateSeq (arg : Seq) -> Integer {
+    var sum : Integer 0
+    var pos : Integer 0
+    const len : Integer @(nums length)
+
+    while pos < len {
+        sum = sum + @(arg pos)
+        pos = pos + 1
+    }
+
+    return sum
+}
+
+defun main () -> Integer {
+    $(print nums)
+    return 0
+}
