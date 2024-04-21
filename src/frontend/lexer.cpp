@@ -47,7 +47,10 @@ namespace tisp::frontend
         {.lexeme = "->", .type = TokenType::arrow}
     };
 
+    static const size_t entry_count = 30;
+
     /* Lexer private impl. */
+
     void Lexer::reset(std::string_view source_view) noexcept
     {
         source = source_view;
@@ -189,7 +192,7 @@ namespace tisp::frontend
 
     /* Lexer public impl. */
 
-    Lexer::Lexer(LexicalEntry entries[], size_t entry_count)
+    Lexer::Lexer()
     : symbols {}, kwords {}, tnames {}, source {}, limit {0}, pos {0}
     {
         for (size_t entries_pos = 0; entries_pos < entry_count; entries_pos++)
@@ -252,6 +255,8 @@ namespace tisp::frontend
 
     std::vector<Token> Lexer::tokenizeSource(std::string_view source_view)
     {
+        reset(source_view);
+
         std::vector<Token> tokens {};
         Token next;
 

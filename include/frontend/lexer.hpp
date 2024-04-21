@@ -60,8 +60,7 @@ namespace tisp::frontend
         [[nodiscard]] Token lexBetween(char delim, TokenType type) noexcept;
 
     public:
-        Lexer() = delete;
-        Lexer(LexicalEntry entries[], size_t entry_count);
+        Lexer();
 
         [[nodiscard]] Token lexNext();
 
