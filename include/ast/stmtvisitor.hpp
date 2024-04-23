@@ -1,12 +1,8 @@
-#ifndef ASTVISITOR_HPP
-#define ASTVISITOR_HPP
+#ifndef STMTVISITOR_HPP
+#define STMTVISITOR_HPP
 
 namespace tisp::ast
 {
-    class Literal;
-    class Unary;
-    class Binary;
-
     class Variable;
     class Mutation;
     class Function;
@@ -21,14 +17,10 @@ namespace tisp::ast
     class Import;
 
     template <typename Rt>
-    class AstVisitor
+    class IStmtVisitor
     {
     public:
-        virtual ~AstVisitor() = default;
-
-        virtual Rt visitNode(const Literal &node) = 0;
-        virtual Rt visitNode(const Unary &node) = 0;
-        virtual Rt visitNode(const Binary &node) = 0;
+        virtual ~IStmtVisitor() = default;
 
         virtual Rt visitNode(const Variable &node) = 0;
         virtual Rt visitNode(const Mutation &node) = 0;
