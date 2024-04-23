@@ -1,7 +1,7 @@
 # Grammar
 
 ### "New" Features
- - typenames are all uppercase to reduce word ambiguity!
+ - All typenames are uppercase to reduce ambiguity in parsing.
  - "$" operator is for invoking functions.
  - "@" operator is for accessing something in a sequence.
 
@@ -13,7 +13,7 @@ literal ::= Boolean | Integer | Double | String | Sequence | Nil | identifier
 unary ::= ("$" | "-" | "@") "(" literal (expr)* ")"
 factor ::= unary (("*" | "/") unary)*
 term ::= factor (("+" | "-") factor)*
-compare ::= term (("==" | "!=" | ">" | "<") term)
+compare ::= term (("==" | "!=" | ">" | ">=" | "<" | "<=") term)
 conditional ::= compare (("&&" | "||") compare)*
 expr = conditional
 
