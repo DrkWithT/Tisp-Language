@@ -55,6 +55,7 @@ namespace tisp::frontend
 
         [[nodiscard]] Token lexWhitespace() noexcept;
         [[nodiscard]] Token lexOtherWord() noexcept;
+        [[nodiscard]] Token lexNumber() noexcept;
         [[nodiscard]] Token lexPunctuation() noexcept;
         [[nodiscard]] Token lexSingle(TokenType type) noexcept;
         [[nodiscard]] Token lexBetween(char delim, TokenType type) noexcept;

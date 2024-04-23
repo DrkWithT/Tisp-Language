@@ -58,17 +58,17 @@ namespace tisp::frontend
         pos = 0;
     }
 
-    [[nodiscard]] bool Lexer::isAtEnd() const noexcept
+    bool Lexer::isAtEnd() const noexcept
     {
         return pos >= limit;
     }
 
-    [[nodiscard]] char Lexer::peekSymbol() const
+    char Lexer::peekSymbol() const
     {
         return source[pos];
     }
 
-    [[nodiscard]] Token Lexer::lexWhitespace() noexcept
+    Token Lexer::lexWhitespace() noexcept
     {
         size_t lex_begin = pos;
         size_t lex_len = 0;
@@ -97,7 +97,7 @@ namespace tisp::frontend
         return {.begin = lex_begin, .length = lex_len, .line = lex_line, .type = TokenType::whitespace};
     }
 
-    [[nodiscard]] Token Lexer::lexOtherWord() noexcept
+    Token Lexer::lexOtherWord() noexcept
     {
         size_t lex_begin = pos;
         size_t lex_len = 0;
@@ -128,7 +128,36 @@ namespace tisp::frontend
         return result;
     }
 
-    [[nodiscard]] Token Lexer::lexPunctuation() noexcept
+    Token Lexer::lexNumber() noexcept
+    {
+        size_t lex_begin = pos;
+        size_t lex_len = 0;
+        int dots = 0;
+        char temp;
+
+        while (!isAtEnd())
+        {
+            temp = peekSymbol();
+
+            if (!matchNumeric(temp))
+                break;
+
+            if (temp == '.')
+                dots++;
+
+            lex_len++;
+            pos++;
+        }
+
+        if (dots < 1)
+            return {.begin = lex_begin, .length = lex_len, .line = line, .type = TokenType::num_int};
+        else if (dots == 1)
+            return {.begin = lex_begin, .length = lex_len, .line = line, .type = TokenType::num_dbl};
+
+        return {.begin = lex_begin, .length = lex_len, .line = line, .type = TokenType::unknown};
+    }
+
+    Token Lexer::lexPunctuation() noexcept
     {
         size_t lex_begin = pos;
         size_t lex_len = 0;
@@ -215,7 +244,6 @@ namespace tisp::frontend
 
         char c = peekSymbol();
 
-        // whitespacing
         switch (c)
         {
             case ' ':
@@ -225,6 +253,10 @@ namespace tisp::frontend
                 return lexWhitespace();
             case '#':
                 return lexBetween('#', TokenType::comment);
+            case '.':
+                return lexSingle(TokenType::dot);
+            case ',':
+                return lexSingle(TokenType::comma);
             case '\"':
                 return lexBetween('\"', TokenType::strbody);
             case '(':
@@ -247,6 +279,8 @@ namespace tisp::frontend
             return lexPunctuation();
         else if (matchAlphabetic(c))
             return lexOtherWord();
+        else if (matchNumeric(c))
+            return lexNumber();
 
         pos += 1;
 
