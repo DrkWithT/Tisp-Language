@@ -1,0 +1,8 @@
+# Tisp hello world #
+
+use io.print
+
+defun main() -> Integer {
+    $(print "Hello World")
+    return 0
+}
