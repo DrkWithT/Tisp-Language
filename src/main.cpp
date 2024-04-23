@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author DrkWithT
- * @brief Implements main interpreter code.
+ * @brief Implements main interpreter code: args checking, running interpreter, etc.
  * @version 0.1
  * @date 2024-04-20
  * 
@@ -47,7 +47,7 @@ using MyLexer = tisp::frontend::Lexer;
 
 std::ostream& operator<<(std::ostream& os, const MyToken& token) noexcept
 {
-    os << "begin=" << token.begin << ", length = " << token.length << ", type = " << static_cast<int>(token.type) << '\n';
+    os << "{begin=" << token.begin << ", length = " << token.length << ", type = " << static_cast<int>(token.type) << "}\n";
 
     return os;
 }
@@ -60,8 +60,20 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    std::string source_path {argv[1]};
-    std::string blob = readFile(source_path);
+    std::string arg {argv[1]};
+
+    if (arg == "--version")
+    {
+        std::cout << "Tipsi (Tisp v0.0.1)\nBy: DrkWithT at GitHub\n";
+        return 0;
+    }
+    else if (arg == "--help")
+    {
+        std::cout << "usage: ./tipsi [--version | help] <file>\n";
+        return 0;
+    }
+
+    std::string blob = readFile(arg);
 
     MyLexer lexer {};
     auto tokens = lexer.tokenizeSource(blob);
