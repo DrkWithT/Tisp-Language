@@ -24,11 +24,12 @@ variable ::= constant | mutable
 constant ::= "const" identifier ":" typename expr
 mutable ::= "var" identifier ":" typename expr
 mutation ::= identifier "=" expr
-defun ::= "defun" identifier "(" param* ")" "->" typename block
+defun ::= "defun" identifier "(" (param ("," param)? )* ")" "->" typename block
 param ::= identifier ":" typename
 block ::= "{" (inner)+ "}"
 inner ::= variable | mutation | defun | match | while | return
-match ::= "match" (identifier)* "{" ("case" expr block)* ("default" block) "}"
+match ::= "match" identifier "{" (case)+ ("default" block) "}"
+case ::= "case" expr block
 return ::= "return" expr
 while ::= "while" expr block
 outer ::= variable | defun | generic | import
