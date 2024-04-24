@@ -7,9 +7,9 @@ namespace tisp::ast
     class Mutation;
     class Function;
     class Parameter;
+    class Block;
     class Match;
     class Case;
-    class Default;
     class Return;
     class While;
     class Generic;
