@@ -13,9 +13,9 @@ namespace tisp::ast
     public:
         virtual ~IExprVisitor() = default;
 
-        virtual Rt visitNode(const Literal &node) = 0;
-        virtual Rt visitNode(const Unary &node) = 0;
-        virtual Rt visitNode(const Binary &node) = 0;
+        virtual Rt visitLiteral(const Literal &node) = 0;
+        virtual Rt visitUnary(const Unary &node) = 0;
+        virtual Rt visitBinary(const Binary &node) = 0;
     };
 }
 
