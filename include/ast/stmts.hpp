@@ -39,6 +39,7 @@ namespace tisp::ast
         Mutation(std::string name_arg, std::unique_ptr<IExpression> rv_arg);
 
         const std::string& getName() const noexcept;
+        const std::unique_ptr<IExpression>& getExpression() const noexcept;
 
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
@@ -87,6 +88,8 @@ namespace tisp::ast
     public:
         Block() = delete;
         Block(std::vector<std::unique_ptr<IStatement>> stmts_arg);
+
+        const std::vector<std::unique_ptr<IStatement>>& getStatements() const noexcept;
 
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
