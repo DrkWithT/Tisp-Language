@@ -8,46 +8,53 @@
  *
  */
 
+#include <array>
 #include "frontend/lexer.hpp"
 
 namespace tisp::frontend
 {
     /* Lexical config for Lexer */
 
-    static const LexicalEntry entries[] {
-        {.lexeme = "Boolean", .type = TokenType::tname},
-        {.lexeme = "Integer", .type = TokenType::tname},
-        {.lexeme = "Double", .type = TokenType::tname},
-        {.lexeme = "String", .type = TokenType::tname},
-        {.lexeme = "Seq", .type = TokenType::tname},
-        {.lexeme = "Nil", .type = TokenType::tname},
-        {.lexeme = "const", .type = TokenType::keyword},
-        {.lexeme = "var", .type = TokenType::keyword},
-        {.lexeme = "defun", .type = TokenType::keyword},
-        {.lexeme = "match", .type = TokenType::keyword},
-        {.lexeme = "case", .type = TokenType::keyword},
-        {.lexeme = "return", .type = TokenType::keyword},
-        {.lexeme = "while", .type = TokenType::keyword},
-        {.lexeme = "generic", .type = TokenType::keyword},
-        {.lexeme = "use", .type = TokenType::keyword},
-        {.lexeme = "$", .type = TokenType::op_invoke},
-        {.lexeme = "@", .type = TokenType::op_access},
-        {.lexeme = "=", .type = TokenType::op_set},
-        {.lexeme = "+", .type = TokenType::op_plus},
-        {.lexeme = "-", .type = TokenType::op_minus},
-        {.lexeme = "*", .type = TokenType::op_times},
-        {.lexeme = "/", .type = TokenType::op_slash},
-        {.lexeme = ">", .type = TokenType::op_gt},
-        {.lexeme = ">=", .type = TokenType::op_gte},
-        {.lexeme = "<", .type = TokenType::op_lt},
-        {.lexeme = "<=", .type = TokenType::op_lte},
-        {.lexeme = "&&", .type = TokenType::op_and},
-        {.lexeme = "||", .type = TokenType::op_or},
-        {.lexeme = ":", .type = TokenType::colon},
-        {.lexeme = "->", .type = TokenType::arrow}
-    };
+    LexicalEntry::LexicalEntry(const char *cstr, TokenType type_arg)
+    : lexeme {cstr}, type {type_arg} {}
 
-    static const size_t entry_count = 30;
+    constexpr size_t entry_count = 33;
+
+    static std::array<LexicalEntry, entry_count> entries = {
+        LexicalEntry {"Boolean", TokenType::tname},
+        {"Integer", TokenType::tname},
+        {"Double", TokenType::tname},
+        {"String", TokenType::tname},
+        {"Seq", TokenType::tname},
+        {"Nil", TokenType::tname},
+        {"const", TokenType::keyword},
+        {"var", TokenType::keyword},
+        {"defun", TokenType::keyword},
+        {"match", TokenType::keyword},
+        {"case", TokenType::keyword},
+        {"return", TokenType::keyword},
+        {"while", TokenType::keyword},
+        {"generic", TokenType::keyword},
+        {"use", TokenType::keyword},
+        {"$", TokenType::op_invoke},
+        {"@", TokenType::op_access},
+        {"=", TokenType::op_set},
+        {"+", TokenType::op_plus},
+        {"-", TokenType::op_minus},
+        {"*", TokenType::op_times},
+        {"/", TokenType::op_slash},
+        {">", TokenType::op_gt},
+        {">=", TokenType::op_gte},
+        {"<", TokenType::op_lt},
+        {"<=", TokenType::op_lte},
+        {"&&", TokenType::op_and},
+        {"||", TokenType::op_or},
+        {":", TokenType::colon},
+        {"->", TokenType::arrow},
+        {"nil", TokenType::lt_nil},
+        {"true", TokenType::lt_true},
+        {"false", TokenType::lt_false}
+    };
 
     /* Lexer private impl. */
 
@@ -115,6 +122,8 @@ namespace tisp::frontend
             result.type = TokenType::tname;
         else if (kwords.find(lexeme) != kwords.end())
             result.type = TokenType::keyword;
+        else if (specials.find(lexeme) != specials.end())
+            result.type = specials.at(lexeme);
         else
             result.type = TokenType::identifier;
 
@@ -215,18 +224,20 @@ namespace tisp::frontend
     /* Lexer public impl. */
 
     Lexer::Lexer(std::string_view source_view)
-    : symbols {}, kwords {}, tnames {}, source {source_view}, limit {source_view.length()}, pos {0}
+    : symbols {}, kwords {}, tnames {}, specials {}, source {source_view}, limit {source_view.length()}, pos {0}
     {
-        for (size_t entries_pos = 0; entries_pos < entry_count; entries_pos++)
+        for (const auto& item : entries)
         {
-            auto entry_type = entries[entries_pos].type;
+            const auto& [lexeme, type] = item;
 
-            if (entry_type == TokenType::tname)
-                tnames.insert(entries[entries_pos].lexeme);
-            else if (entry_type == TokenType::keyword)
-                kwords.insert(entries[entries_pos].lexeme);
-            else if (entry_type >= TokenType::op_invoke && entry_type <= TokenType::arrow)
-                symbols[entries[entries_pos].lexeme] = entry_type;
+            if (type == TokenType::tname)
+                tnames.insert(lexeme);
+            else if (type == TokenType::keyword)
+                kwords.insert(lexeme);
+            else if (type >= TokenType::op_invoke && type <= TokenType::arrow)
+                symbols[lexeme] = type;
+            else if (type >= TokenType::lt_nil && type <= TokenType::lt_false)
+                specials[lexeme] = type;
         }
     }
 

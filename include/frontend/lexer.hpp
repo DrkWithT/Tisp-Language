@@ -36,6 +36,8 @@ namespace tisp::frontend
     {
         std::string lexeme;
         TokenType type;
+
+        LexicalEntry(const char *cstr, TokenType type_arg);
     };
 
     class Lexer
@@ -44,6 +46,7 @@ namespace tisp::frontend
         std::map<std::string, TokenType> symbols; // operators and punctuation
         std::set<std::string> kwords;
         std::set<std::string> tnames;
+        std::map<std::string, TokenType> specials; // nil, true, false
         std::string_view source;
         size_t limit;
         size_t pos;
