@@ -2,7 +2,7 @@
 
 use io.print
 
-const nums : Seq [1, 2, 3, 4]
+const nums : Seq(Integer) [1, 2, 3, 4]
 
 defun accumulateSeq (arg : Seq) -> Integer {
     var sum : Integer 0

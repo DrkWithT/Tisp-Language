@@ -4,20 +4,21 @@
  - All typenames are uppercase to reduce ambiguity in parsing.
  - "$" operator is for invoking functions.
  - "@" operator is for accessing something in a sequence.
+ - Negation operator prohibits additional args after the identifier!
 
 ### Rules: (expr, stmts)
 ```bnf
 comment ::= "#" ... "#"
 
 literal ::= Boolean | Integer | Double | String | Sequence | Nil | identifier
-unary ::= ("$" | "-" | "@") "(" literal (expr)* ")"
+unary ::= ("$" | "@") "(" identifier (expr)* ")" | ("-")? identifier
 factor ::= unary (("*" | "/") unary)*
 term ::= factor (("+" | "-") factor)*
 compare ::= term (("==" | "!=" | ">" | ">=" | "<" | "<=") term)
 conditional ::= compare (("&&" | "||") compare)*
 expr = conditional
 
-typename = "Boolean" | "Integer" | "Double" | "String" | "Seq" | "Nil" | adt
+typename = ("Boolean" | "Integer" | "Double" | "String" | "Seq" | "Nil" | adt) ( "(" typename ")" )?
 adt = ... ; identifier with uppercase first letter!
 
 variable ::= constant | mutable
