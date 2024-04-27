@@ -49,7 +49,6 @@ namespace tisp::frontend
         size_t pos;
         size_t line;
 
-        void reset(std::string_view source_view) noexcept;
         [[nodiscard]] bool isAtEnd() const noexcept;
         [[nodiscard]] char peekSymbol() const;
 
@@ -61,11 +60,9 @@ namespace tisp::frontend
         [[nodiscard]] Token lexBetween(char delim, TokenType type) noexcept;
 
     public:
-        Lexer();
+        Lexer(std::string_view source_view);
 
         [[nodiscard]] Token lexNext();
-
-        [[nodiscard]] std::vector<Token> tokenizeSource(std::string_view source_view);
     };
 }
 

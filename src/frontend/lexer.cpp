@@ -51,13 +51,6 @@ namespace tisp::frontend
 
     /* Lexer private impl. */
 
-    void Lexer::reset(std::string_view source_view) noexcept
-    {
-        source = source_view;
-        limit = source.length();
-        pos = 0;
-    }
-
     bool Lexer::isAtEnd() const noexcept
     {
         return pos >= limit;
@@ -221,8 +214,8 @@ namespace tisp::frontend
 
     /* Lexer public impl. */
 
-    Lexer::Lexer()
-    : symbols {}, kwords {}, tnames {}, source {}, limit {0}, pos {0}
+    Lexer::Lexer(std::string_view source_view)
+    : symbols {}, kwords {}, tnames {}, source {source_view}, limit {source_view.length()}, pos {0}
     {
         for (size_t entries_pos = 0; entries_pos < entry_count; entries_pos++)
         {
@@ -285,21 +278,5 @@ namespace tisp::frontend
         pos += 1;
 
         return {.begin = pos - 1, .length = 1, .line = line, .type = TokenType::unknown};
-    }
-
-    std::vector<Token> Lexer::tokenizeSource(std::string_view source_view)
-    {
-        reset(source_view);
-
-        std::vector<Token> tokens {};
-        Token next;
-
-        do
-        {
-            next = lexNext();
-            tokens.push_back(next);
-        } while (next.type != TokenType::eof);
-
-        return tokens;
     }
 }
