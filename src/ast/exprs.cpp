@@ -18,7 +18,7 @@ namespace tisp::ast
     Sequence::Sequence()
     : items {}, homogen_type {DataType::unknown} {}
 
-    Sequence::Sequence(std::vector<std::any> item_args, DataType type)
+    Sequence::Sequence(std::vector<std::unique_ptr<IExpression>> item_args, DataType type)
     : items(std::move(item_args)), homogen_type {type} {}
 
     /* Literal */
@@ -53,8 +53,8 @@ namespace tisp::ast
 
     /* Unary */
 
-    Unary::Unary(std::unique_ptr<IExpression> arg, OpType op_arg)
-    : inner(std::move(arg)), op {op_arg} {}
+    Unary::Unary(std::vector<std::unique_ptr<IExpression>> argv_arg, std::string identifier_arg, OpType op_arg)
+    : argv(std::move(argv_arg)), identifier(std::move(identifier_arg)), op {op_arg} {}
 
     std::any Unary::acceptVisitor(IExprVisitor<std::any>& visitor) const
     {

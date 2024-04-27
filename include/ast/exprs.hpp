@@ -39,14 +39,20 @@ namespace tisp::ast
         nil
     };
 
+    struct FullDataType
+    {
+        DataType outer;
+        DataType inner;
+    };
+
     struct Nil {};
     struct Sequence
     {
-        std::vector<std::any> items;
+        std::vector<std::unique_ptr<IExpression>> items;
         DataType homogen_type;
 
         Sequence();
-        Sequence(std::vector<std::any> item_args, DataType type);
+        Sequence(std::vector<std::unique_ptr<IExpression>> item_args, DataType type);
     };
 
     template <typename Nt>
@@ -108,12 +114,13 @@ namespace tisp::ast
     class Unary : public IExpression
     {
     private:
-        std::unique_ptr<IExpression> inner;
+        std::vector<std::unique_ptr<IExpression>> argv;
+        std::string identifier;
         OpType op;
 
     public:
         Unary() = delete;
-        Unary(std::unique_ptr<IExpression> arg, OpType op_arg);
+        Unary(std::vector<std::unique_ptr<IExpression>> argv_arg, std::string identifier_arg, OpType op_arg);
 
         [[nodiscard]] constexpr OpType getOpType() const noexcept
         {
