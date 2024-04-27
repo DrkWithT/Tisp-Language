@@ -51,6 +51,8 @@ namespace tisp::frontend
 
         friend std::ostream& operator<<(std::ostream& os, const ParseErrorInfo& parse_dump) noexcept;
     };
+
+    [[nodiscard]] std::string stringifyParseError(const ParseErrorInfo& error) noexcept;
 }
 
 #endif

@@ -47,4 +47,13 @@ namespace tisp::frontend
 
         return os;
     }
+
+    std::string stringifyParseError(const ParseErrorInfo& error) noexcept
+    {
+        std::ostringstream sout {};
+
+        sout << error << '\n';
+
+        return sout.str();
+    }
 }
