@@ -9,6 +9,7 @@
  */
 
 #include "frontend/info.hpp"
+#include <sstream>
 
 namespace tisp::frontend
 {
@@ -46,6 +47,15 @@ namespace tisp::frontend
         os << "ParseError [line " << parse_dump.suspect.line << ", " << fetchSyntaxConstructName<syntax_construct_count>(sc_names, parse_dump.where) << "]:\n" << parse_dump.msg;
 
         return os;
+    }
+
+    std::string stringifyParseError(const Token& suspect_arg, SyntaxConstruct where_arg, std::string_view msg_arg)
+    {
+        std::ostringstream sout {};
+
+        sout << "ParseError [line " << suspect_arg.line << ", " << fetchSyntaxConstructName<syntax_construct_count>(sc_names, where_arg) << "]:\n" << msg_arg;
+
+        return sout.str();
     }
 
     std::string stringifyParseError(const ParseErrorInfo& error) noexcept
