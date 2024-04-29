@@ -60,33 +60,33 @@ namespace tisp::ast
     };
 
     template <typename Nt>
-    constexpr DataType to_lang_type_v = DataType::nil;
+    static constexpr DataType to_lang_type_v = DataType::nil;
 
     template <>
-    constexpr DataType to_lang_type_v<Nil> = DataType::nil;
+    static constexpr DataType to_lang_type_v<Nil> = DataType::nil;
 
     template <>
-    constexpr DataType to_lang_type_v<bool> = DataType::boolean;
+    static constexpr DataType to_lang_type_v<bool> = DataType::boolean;
 
     template <>
-    constexpr DataType to_lang_type_v<int> = DataType::integer;
+    static constexpr DataType to_lang_type_v<int> = DataType::integer;
 
     template <>
-    constexpr DataType to_lang_type_v<double> = DataType::ndouble;
+    static constexpr DataType to_lang_type_v<double> = DataType::ndouble;
 
     template <>
-    constexpr DataType to_lang_type_v<std::string> = DataType::string;
+    static constexpr DataType to_lang_type_v<std::string> = DataType::string;
 
     template <>
-    constexpr DataType to_lang_type_v<Sequence> = DataType::sequence;
+    static constexpr DataType to_lang_type_v<Sequence> = DataType::sequence;
 
     template <>
-    constexpr DataType to_lang_type_v<TispToken> = DataType::tbd;
+    static constexpr DataType to_lang_type_v<TispToken> = DataType::tbd;
 
     class Literal : public IExpression
     {
     private:
-        std::variant<Nil, bool, int, double, std::string, std::any, TispToken> value;
+        std::variant<Nil, bool, int, double, std::string, Sequence, TispToken> value;
         FullDataType data_type;
 
     public:

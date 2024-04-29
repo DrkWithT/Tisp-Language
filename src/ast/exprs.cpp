@@ -41,6 +41,9 @@ namespace tisp::ast
     Literal::Literal(Sequence seq)
     : value {std::move(seq)}, data_type {DataType::sequence, seq.homogen_type} {}
 
+    Literal::Literal(TispToken tok)
+    : value {tok}, data_type {DataType::tbd, DataType::tbd} {}
+
     std::any Literal::acceptVisitor(IExprVisitor<std::any>& visitor) const
     {
         return visitor.visitLiteral(*this);

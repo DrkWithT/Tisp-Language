@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <utility>
 #include <iostream>
+#include "ast/stmts.hpp"
 #include "frontend/info.hpp"
 #include "frontend/parser.hpp"
 #include "frontend/token.hpp"
@@ -29,6 +30,7 @@ namespace tisp::frontend
     using TispBlock = tisp::ast::Block;
     using TispMatch = tisp::ast::Match;
     using TispCase = tisp::ast::Case;
+    using TispDefault = tisp::ast::Default;
     using TispReturn = tisp::ast::Return;
     using TispWhile = tisp::ast::While;
     using TispGeneric = tisp::ast::Generic;
@@ -174,7 +176,8 @@ namespace tisp::frontend
         }
 
         /// @note Maybe use std::move on the temporary arg for the sequence for this result? Dunno if unique_ptrs in the TispSeq will complain.
-        return std::make_unique<TispLiteral>(TispSeq {std::move(x_items), complete_type.inner});
+        auto x_seq = TispSeq {std::move(x_items), complete_type.inner};
+        return std::make_unique<TispLiteral>(std::move(x_seq));
     }
 
     std::unique_ptr<Expr> Parser::parseLiteral(TispFullType complete_type)
@@ -623,6 +626,16 @@ namespace tisp::frontend
         auto case_body = parseBlock();
 
         return std::make_unique<TispCase>(std::move(case_cond), std::move(case_body));
+    }
+
+    std::unique_ptr<Stmt> Parser::parseDefault()
+    {
+        construct = SyntaxConstruct::st_fallback;
+        consumeToken({});
+
+        auto x_body = parseBlock();
+
+        return std::make_unique<TispDefault>(std::move(x_body));
     }
 
     std::unique_ptr<Stmt> Parser::parseReturn()

@@ -24,6 +24,7 @@ namespace tisp::frontend
         st_inner,
         st_match,
         st_case,
+        st_fallback,
         st_return,
         st_while,
         st_outer,
