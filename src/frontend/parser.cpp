@@ -181,6 +181,12 @@ namespace tisp::frontend
     {
         construct = SyntaxConstruct::ex_literal;
 
+        if (matchCurrent({TokenType::identifier}))
+        {
+            consumeToken({});
+            return std::make_unique<TispLiteral>(peekPrevious());
+        }
+
         if (matchCurrent({TokenType::keyword}) && (matchLexeme("true", Parser::TokenChoice::curr) || matchLexeme("false", Parser::TokenChoice::curr)))
         {
             bool flag = matchLexeme("true", Parser::TokenChoice::curr);
@@ -229,7 +235,11 @@ namespace tisp::frontend
         construct = SyntaxConstruct::ex_unary;
         TokenType token_type = peekCurrent().type;
 
-        if (!matchCurrent({TokenType::op_invoke, TokenType::op_minus, TokenType::op_access}))
+        if (matchCurrent({TokenType::identifier}))
+        {
+            return parseLiteral({.outer = TispDataType::tbd, .inner = TispDataType::tbd});
+        }
+        else if (!matchCurrent({TokenType::op_invoke, TokenType::op_minus, TokenType::op_access}))
         {
             error_count++;
             throw std::runtime_error {stringifyParseError( peekCurrent(), construct, "Invalid unary operator.")};
