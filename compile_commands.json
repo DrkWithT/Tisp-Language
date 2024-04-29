@@ -18,6 +18,18 @@
   "output": "src/frontend/CMakeFiles/frontend.dir/lexer.cpp.o"
 },
 {
+  "directory": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/derektan/Projects/CPP_Projects/Tisp_Lang/include -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wall -Wextra -Wpedantic -Werror -g -Og -o CMakeFiles/frontend.dir/info.cpp.o -c /Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend/info.cpp",
+  "file": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend/info.cpp",
+  "output": "src/frontend/CMakeFiles/frontend.dir/info.cpp.o"
+},
+{
+  "directory": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/derektan/Projects/CPP_Projects/Tisp_Lang/include -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wall -Wextra -Wpedantic -Werror -g -Og -o CMakeFiles/frontend.dir/parser.cpp.o -c /Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend/parser.cpp",
+  "file": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/frontend/parser.cpp",
+  "output": "src/frontend/CMakeFiles/frontend.dir/parser.cpp.o"
+},
+{
   "directory": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/ast",
   "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/derektan/Projects/CPP_Projects/Tisp_Lang/include -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wall -Wextra -Wpedantic -Werror -g -Og -o CMakeFiles/ast.dir/exprs.cpp.o -c /Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/ast/exprs.cpp",
   "file": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/ast/exprs.cpp",
@@ -28,5 +40,11 @@
   "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/derektan/Projects/CPP_Projects/Tisp_Lang/include -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wall -Wextra -Wpedantic -Werror -g -Og -o CMakeFiles/ast.dir/stmts.cpp.o -c /Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/ast/stmts.cpp",
   "file": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/ast/stmts.cpp",
   "output": "src/ast/CMakeFiles/ast.dir/stmts.cpp.o"
+},
+{
+  "directory": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/utils",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/derektan/Projects/CPP_Projects/Tisp_Lang/include -std=gnu++20 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wall -Wextra -Wpedantic -Werror -g -Og -o CMakeFiles/utils.dir/astprinter.cpp.o -c /Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/utils/astprinter.cpp",
+  "file": "/Users/derektan/Projects/CPP_Projects/Tisp_Lang/src/utils/astprinter.cpp",
+  "output": "src/utils/CMakeFiles/utils.dir/astprinter.cpp.o"
 }
 ]
