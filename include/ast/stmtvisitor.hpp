@@ -10,6 +10,7 @@ namespace tisp::ast
     class Block;
     class Match;
     class Case;
+    class Default;
     class Return;
     class While;
     class Generic;

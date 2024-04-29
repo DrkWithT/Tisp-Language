@@ -18,7 +18,7 @@ namespace tisp::frontend
     LexicalEntry::LexicalEntry(const char *cstr, TokenType type_arg)
     : lexeme {cstr}, type {type_arg} {}
 
-    constexpr size_t entry_count = 33;
+    constexpr size_t entry_count = 35;
 
     static std::array<LexicalEntry, entry_count> entries = {
         LexicalEntry {"Boolean", TokenType::tname},
@@ -43,6 +43,8 @@ namespace tisp::frontend
         {"-", TokenType::op_minus},
         {"*", TokenType::op_times},
         {"/", TokenType::op_slash},
+        {"==", TokenType::op_equ},
+        {"!=", TokenType::op_neq},
         {">", TokenType::op_gt},
         {">=", TokenType::op_gte},
         {"<", TokenType::op_lt},
