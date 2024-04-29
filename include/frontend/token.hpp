@@ -23,6 +23,8 @@ namespace tisp::frontend
         op_minus,
         op_times,
         op_slash,
+        op_equ,
+        op_neq,
         op_gt,
         op_gte,
         op_lt,

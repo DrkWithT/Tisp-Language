@@ -168,6 +168,20 @@ namespace tisp::ast
         return visitor.visitCase(*this);
     }
 
+    /* Default */
+    Default::Default(std::unique_ptr<IStatement> body_arg)
+    : body(std::move(body_arg)) {}
+
+    const std::unique_ptr<IStatement>& Default::getBody() const noexcept
+    {
+        return body;
+    }
+
+    std::any Default::acceptVisitor(IStmtVisitor<std::any>& visitor) const
+    {
+        return visitor.visitDefault(*this);
+    }
+
     /* Return */
 
     Return::Return(std::unique_ptr<IExpression> result_arg)

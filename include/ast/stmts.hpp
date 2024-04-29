@@ -128,6 +128,20 @@ namespace tisp::ast
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
+    class Default : public IStatement
+    {
+    private:
+        std::unique_ptr<IStatement> body;
+
+    public:
+        Default() = delete;
+        Default(std::unique_ptr<IStatement> body_arg);
+
+        const std::unique_ptr<IStatement>& getBody() const noexcept;
+
+        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+    };
+
     class Return : public IStatement
     {
     private:
