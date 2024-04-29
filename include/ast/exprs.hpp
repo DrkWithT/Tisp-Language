@@ -116,7 +116,7 @@ namespace tisp::ast
             return std::get<variant_idx>(value);
         }
 
-        [[nodiscard]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const override;
     };
 
     class Unary : public IExpression
@@ -135,7 +135,7 @@ namespace tisp::ast
             return op;
         }
 
-        [[nodiscard]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const override;
     };
 
     class Binary : public IExpression
@@ -154,7 +154,7 @@ namespace tisp::ast
             return op;
         }
 
-        [[nodiscard]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const;
+        [[maybe_unused]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const;
     };
 }
 

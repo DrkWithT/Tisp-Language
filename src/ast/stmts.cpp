@@ -257,6 +257,11 @@ namespace tisp::ast
     Import::Import(std::vector<std::string> item_path_arg)
     : item_path(std::move(item_path_arg)) {}
 
+    const std::vector<std::string>& Import::getItems() const
+    {
+        return item_path;
+    }
+
     std::any Import::acceptVisitor(IStmtVisitor<std::any>& visitor) const
     {
         return visitor.visitImport(*this);

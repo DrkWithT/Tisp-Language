@@ -25,7 +25,7 @@ namespace tisp::ast
         [[nodiscard]] FullDataType getDataType() const noexcept;
         [[nodiscard]] bool isMutable() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Mutation : public IStatement
@@ -41,7 +41,7 @@ namespace tisp::ast
         const std::string& getName() const noexcept;
         const std::unique_ptr<IExpression>& getExpression() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Function : public IStatement
@@ -61,7 +61,7 @@ namespace tisp::ast
         const std::unique_ptr<IStatement>& getBody() const noexcept;
         const FullDataType& getFullDataType() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Parameter : public IStatement
@@ -77,7 +77,7 @@ namespace tisp::ast
         const std::string& getName() const noexcept;
         const FullDataType& getFullDataType() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Block : public IStatement
@@ -91,7 +91,7 @@ namespace tisp::ast
 
         const std::vector<std::unique_ptr<IStatement>>& getStatements() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Match : public IStatement
@@ -107,7 +107,7 @@ namespace tisp::ast
         const std::vector<std::unique_ptr<IStatement>>& getCases() const noexcept;
         const std::unique_ptr<IStatement>& getFallback() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Case : public IStatement
@@ -123,7 +123,7 @@ namespace tisp::ast
         const std::unique_ptr<IExpression>& getCondition() const noexcept;
         const std::unique_ptr<IStatement>& getBody() const noexcept; 
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Default : public IStatement
@@ -137,7 +137,7 @@ namespace tisp::ast
 
         const std::unique_ptr<IStatement>& getBody() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Return : public IStatement
@@ -151,7 +151,7 @@ namespace tisp::ast
 
         const std::unique_ptr<IExpression>& getResult() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class While : public IStatement
@@ -167,7 +167,7 @@ namespace tisp::ast
         const std::unique_ptr<IExpression>& getConditions() const noexcept;
         const std::unique_ptr<IStatement>& getBody() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Generic : public IStatement
@@ -183,7 +183,7 @@ namespace tisp::ast
         const std::vector<std::string>& getParams() const noexcept;
         const std::unique_ptr<IStatement>& getItem() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Substitution : public IStatement
@@ -199,7 +199,7 @@ namespace tisp::ast
         const std::string& getName() const noexcept;
         const std::vector<std::string>& getTypeNames() const noexcept;
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 
     class Import : public IStatement
@@ -211,7 +211,9 @@ namespace tisp::ast
         Import() = delete;
         Import(std::vector<std::string> item_path_arg);
 
-        [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
+        const std::vector<std::string>& getItems() const;
+
+        [[maybe_unused]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
 }
 
