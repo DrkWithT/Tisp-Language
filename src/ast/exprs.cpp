@@ -24,27 +24,22 @@ namespace tisp::ast
     /* Literal */
 
     Literal::Literal()
-    : value {Nil {}}, data_type {DataType::nil} {}
+    : value {Nil {}}, data_type {DataType::nil, DataType::unknown} {}
 
     Literal::Literal(bool b)
-    : value {b}, data_type {DataType::boolean} {}
+    : value {b}, data_type {DataType::boolean, DataType::unknown} {}
 
     Literal::Literal(int i)
-    : value {i}, data_type {DataType::integer} {}
+    : value {i}, data_type {DataType::integer, DataType::unknown} {}
 
     Literal::Literal(double dbl)
-    : value {dbl}, data_type {DataType::ndouble} {}
+    : value {dbl}, data_type {DataType::ndouble, DataType::unknown} {}
 
     Literal::Literal(std::string str)
-    : value {std::move(str)}, data_type {DataType::string} {}
+    : value {std::move(str)}, data_type {DataType::string, DataType::unknown} {}
 
     Literal::Literal(Sequence seq)
-    : value {std::move(seq)}, data_type {DataType::sequence} {}
-
-    constexpr DataType Literal::getDataType() const noexcept
-    {
-        return data_type;
-    }
+    : value {std::move(seq)}, data_type {DataType::sequence, seq.homogen_type} {}
 
     std::any Literal::acceptVisitor(IExprVisitor<std::any>& visitor) const
     {

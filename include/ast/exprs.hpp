@@ -7,9 +7,12 @@
 #include <variant>
 #include <vector>
 #include "ast/exprbase.hpp"
+#include "frontend/token.hpp"
 
 namespace tisp::ast
 {
+    using TispToken = tisp::frontend::Token;
+
     enum class OpType
     {
         invoke,
@@ -36,7 +39,8 @@ namespace tisp::ast
         ndouble,
         string,
         sequence,
-        nil
+        nil,
+        tbd       // variable identifier
     };
 
     struct FullDataType
@@ -56,7 +60,7 @@ namespace tisp::ast
     };
 
     template <typename Nt>
-    constexpr DataType to_lang_type_v = DataType::unknown;
+    constexpr DataType to_lang_type_v = DataType::nil;
 
     template <>
     constexpr DataType to_lang_type_v<Nil> = DataType::nil;
@@ -76,11 +80,14 @@ namespace tisp::ast
     template <>
     constexpr DataType to_lang_type_v<Sequence> = DataType::sequence;
 
+    template <>
+    constexpr DataType to_lang_type_v<TispToken> = DataType::tbd;
+
     class Literal : public IExpression
     {
     private:
-        std::variant<Nil, bool, int, double, std::string, std::any> value;
-        DataType data_type;
+        std::variant<Nil, bool, int, double, std::string, std::any, TispToken> value;
+        FullDataType data_type;
 
     public:
         Literal();
@@ -89,18 +96,19 @@ namespace tisp::ast
         Literal(double dbl);
         Literal(std::string str);
         Literal(Sequence seq);
+        Literal(TispToken tok);
 
-        [[nodiscard]] constexpr DataType getDataType() const noexcept
+        [[nodiscard]] constexpr FullDataType getDataType() const noexcept
         {
             return data_type;
         }
 
         template <typename Nt>
-        constexpr Nt toNativeType() const noexcept
+        constexpr Nt toNativeType() const
         {
             constexpr auto vtype = to_lang_type_v<Nt>;
 
-            if constexpr (vtype == DataType::unknown || vtype != getDataType())
+            if constexpr (vtype == DataType::unknown || vtype == DataType::nil || vtype != getDataType().outer)
                 return Nt {};
 
             constexpr auto variant_idx = static_cast<int>(vtype);
@@ -146,7 +154,7 @@ namespace tisp::ast
             return op;
         }
 
-        [[nodiscard]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const noexcept;
+        [[nodiscard]] std::any acceptVisitor(IExprVisitor<std::any>& visitor) const;
     };
 }
 
