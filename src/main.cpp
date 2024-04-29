@@ -14,12 +14,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "frontend/token.hpp"
-#include "frontend/lexer.hpp"
+#include "frontend/parser.hpp"
+#include "utils/astprinter.hpp"
 
 using MyToken = tisp::frontend::Token;
-using MyLexType = tisp::frontend::TokenType;
-using MyLexer = tisp::frontend::Lexer;
+using MyParser = tisp::frontend::Parser;
+using MyPrinter = tisp::utils::ASTPrinter;
 
 [[nodiscard]] std::string readFile(const std::string& file_path)
 {
@@ -74,12 +74,13 @@ int main(int argc, char* argv[])
     }
 
     std::string blob = readFile(arg);
+    std::string file_name = arg.substr(arg.find_last_of('/') + 1);
 
-    MyLexer lexer {};
-    auto tokens = lexer.tokenizeSource(blob);
+    /// @todo do parsing and then VM runner later on.
+    MyParser parser {blob};
+    auto prgm_ast = parser.parseAll(file_name);
+    MyPrinter printer {};
 
-    for (const auto& tk : tokens)
-        std::cout << tk;
-
-    // todo: add parsing and then VM runner.
+    for (const auto& stmt : prgm_ast.getStatements())
+        printer.visitAnyStmt(stmt);
 }
