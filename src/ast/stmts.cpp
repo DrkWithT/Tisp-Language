@@ -15,7 +15,7 @@ namespace tisp::ast
 {
     /* Variable */
 
-    Variable::Variable(std::string name_arg, std::unique_ptr<IExpression> rv_arg, DataType type_arg, bool is_var)
+    Variable::Variable(std::string name_arg, std::unique_ptr<IExpression> rv_arg, FullDataType type_arg, bool is_var)
     : name(std::move(name_arg)), rv(std::move(rv_arg)), type {type_arg}, is_mutable {is_var} {}
 
     const std::string& Variable::getName() const noexcept
@@ -23,7 +23,7 @@ namespace tisp::ast
         return name;
     }
 
-    DataType Variable::getDataType() const noexcept
+    FullDataType Variable::getDataType() const noexcept
     {
         return type;
     }
@@ -60,7 +60,7 @@ namespace tisp::ast
 
     /* Function */
 
-    Function::Function(std::string name_arg, std::vector<std::unique_ptr<IStatement>> params_arg, std::unique_ptr<IStatement> body_arg, DataType type_arg)
+    Function::Function(std::string name_arg, std::vector<std::unique_ptr<IStatement>> params_arg, std::unique_ptr<IStatement> body_arg, FullDataType type_arg)
     : name(std::move(name_arg)), params(std::move(params_arg)), body(std::move(body_arg)), type {type_arg} {}
 
     const std::string& Function::getName() const noexcept
@@ -78,7 +78,7 @@ namespace tisp::ast
         return body;
     }
 
-    [[nodiscard]] DataType Function::getDataType() const noexcept
+    const FullDataType& Function::getFullDataType() const noexcept
     {
         return type;
     }
@@ -90,7 +90,7 @@ namespace tisp::ast
 
     /* Parameter */
 
-    Parameter::Parameter(std::string name_arg, DataType type_arg)
+    Parameter::Parameter(std::string name_arg, FullDataType type_arg)
     : name(std::move(name_arg)), type {type_arg} {}
 
     const std::string& Parameter::getName() const noexcept
@@ -98,7 +98,7 @@ namespace tisp::ast
         return name;
     }
 
-    DataType Parameter::getDataType() const noexcept
+    const FullDataType& Parameter::getFullDataType() const noexcept
     {
         return type;
     }
@@ -125,13 +125,8 @@ namespace tisp::ast
 
     /* Match */
 
-    Match::Match(std::string input_arg, std::vector<std::unique_ptr<IStatement>> cases_arg, std::unique_ptr<IStatement> fallback_arg)
-    : input_name(std::move(input_arg)), cases(std::move(cases_arg)), fallback(std::move(fallback_arg)) {}
-
-    const std::string& Match::getName() const noexcept
-    {
-        return input_name;
-    }
+    Match::Match(std::vector<std::unique_ptr<IStatement>> cases_arg, std::unique_ptr<IStatement> fallback_arg)
+    : cases(std::move(cases_arg)), fallback(std::move(fallback_arg)) {}
 
     const std::vector<std::unique_ptr<IStatement>>& Match::getCases() const noexcept
     {

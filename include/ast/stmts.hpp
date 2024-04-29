@@ -14,15 +14,15 @@ namespace tisp::ast
     private:
         std::string name;
         std::unique_ptr<IExpression> rv;
-        DataType type;
+        FullDataType type;
         bool is_mutable;
 
     public:
         Variable() = delete;
-        Variable(std::string name_arg, std::unique_ptr<IExpression> rv_arg, DataType type_arg, bool is_var);
+        Variable(std::string name_arg, std::unique_ptr<IExpression> rv_arg, FullDataType type_arg, bool is_var);
 
         const std::string& getName() const noexcept;
-        [[nodiscard]] DataType getDataType() const noexcept;
+        [[nodiscard]] FullDataType getDataType() const noexcept;
         [[nodiscard]] bool isMutable() const noexcept;
 
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
@@ -50,16 +50,16 @@ namespace tisp::ast
         std::string name;
         std::vector<std::unique_ptr<IStatement>> params;
         std::unique_ptr<IStatement> body;
-        DataType type;
+        FullDataType type;
 
     public:
         Function() = delete;
-        Function(std::string name_arg, std::vector<std::unique_ptr<IStatement>> params_arg, std::unique_ptr<IStatement> body_arg, DataType type_arg);
+        Function(std::string name_arg, std::vector<std::unique_ptr<IStatement>> params_arg, std::unique_ptr<IStatement> body_arg, FullDataType type_arg);
 
         const std::string& getName() const noexcept;
         const std::vector<std::unique_ptr<IStatement>>& getParams() const noexcept;
         const std::unique_ptr<IStatement>& getBody() const noexcept;
-        [[nodiscard]] DataType getDataType() const noexcept;
+        const FullDataType& getFullDataType() const noexcept;
 
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
@@ -68,14 +68,14 @@ namespace tisp::ast
     {
     private:
         std::string name;
-        DataType type;
+        FullDataType type;
 
     public:
         Parameter() = delete;
-        Parameter(std::string name_arg, DataType type_arg);
+        Parameter(std::string name_arg, FullDataType type_arg);
 
         const std::string& getName() const noexcept;
-        [[nodiscard]] DataType getDataType() const noexcept;
+        const FullDataType& getFullDataType() const noexcept;
 
         [[nodiscard]] std::any acceptVisitor(IStmtVisitor<std::any>& visitor) const override;
     };
@@ -97,15 +97,13 @@ namespace tisp::ast
     class Match : public IStatement
     {
     private:
-        std::string input_name;
         std::vector<std::unique_ptr<IStatement>> cases;
         std::unique_ptr<IStatement> fallback;
 
     public:
         Match() = delete;
-        Match(std::string input_arg, std::vector<std::unique_ptr<IStatement>> cases_arg, std::unique_ptr<IStatement> fallback_arg);
+        Match(std::vector<std::unique_ptr<IStatement>> cases_arg, std::unique_ptr<IStatement> fallback_arg);
 
-        const std::string& getName() const noexcept;
         const std::vector<std::unique_ptr<IStatement>>& getCases() const noexcept;
         const std::unique_ptr<IStatement>& getFallback() const noexcept;
 

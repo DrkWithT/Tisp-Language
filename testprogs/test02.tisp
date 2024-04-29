@@ -3,7 +3,7 @@
 use io.print
 
 defun doFactorial (n : Integer) -> Integer {
-    match n {
+    match {
         case n <= 1 {
             return 1
         }
