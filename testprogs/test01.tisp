@@ -18,6 +18,8 @@ defun accumulateSeq (arg : Seq) -> Integer {
 }
 
 defun main () -> Integer {
-    $(print nums)
+    const foo : Integer $(accumulateSeq nums)
+    const pstatus : Nil $(print foo)
+
     return 0
 }

@@ -40,6 +40,8 @@ namespace tisp::frontend
                 return TispDataType::string;
             case TokenType::lbrack:
                 return TispDataType::sequence;
+            case TokenType::identifier:
+                return TispDataType::tbd;
             default:
                 return TispDataType::unknown;
         }
