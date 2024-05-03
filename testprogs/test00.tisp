@@ -3,6 +3,6 @@
 use io.print
 
 defun main() -> Integer {
-    $(print "Hello World")
+    var pstatus : Nil $(print "Hello World")
     return 0
 }

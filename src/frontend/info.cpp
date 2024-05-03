@@ -9,6 +9,7 @@
  */
 
 #include "frontend/info.hpp"
+#include "frontend/token.hpp"
 #include <sstream>
 
 namespace tisp::frontend

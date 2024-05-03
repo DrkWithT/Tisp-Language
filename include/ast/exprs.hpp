@@ -28,7 +28,8 @@ namespace tisp::ast
         lesser,
         atleast,
         logic_and,
-        logic_or
+        logic_or,
+        nop
     };
 
     enum class DataType
