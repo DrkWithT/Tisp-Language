@@ -23,6 +23,28 @@ namespace tisp::frontend
     using TispFullType = tisp::ast::FullDataType;
     using TispSeq = tisp::ast::Sequence;
 
+    [[nodiscard]] constexpr TispDataType deduceLiteralType(TokenType token_type)
+    {
+        switch (token_type)
+        {
+            case TokenType::lt_nil:
+                return TispDataType::nil;
+            case TokenType::lt_true:
+            case TokenType::lt_false:
+                return TispDataType::boolean;
+            case TokenType::num_int:
+                return TispDataType::integer;
+            case TokenType::num_dbl:
+                return TispDataType::ndouble;
+            case TokenType::strbody:
+                return TispDataType::string;
+            case TokenType::lbrack:
+                return TispDataType::sequence;
+            default:
+                return TispDataType::unknown;
+        }
+    }
+
     class Program
     {
     private:

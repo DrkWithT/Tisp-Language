@@ -2,6 +2,7 @@
  * @file parser.cpp
  * @author DrkWithT
  * @brief Implements parser.
+ * @note Literals are actually unaries with nop (the value is what it is) and identifier "".
  * @date 2024-04-26
  *
  * @copyright Copyright (c) 2024
@@ -12,6 +13,7 @@
 #include <stdexcept>
 #include <utility>
 #include <iostream>
+#include "ast/exprs.hpp"
 #include "ast/stmts.hpp"
 #include "frontend/info.hpp"
 #include "frontend/parser.hpp"
@@ -234,21 +236,14 @@ namespace tisp::frontend
     }
 
     std::unique_ptr<Expr> Parser::parseUnary()
-    {
+    { 
         construct = SyntaxConstruct::ex_unary;
         TokenType token_type = peekCurrent().type;
 
-        if (matchCurrent({TokenType::identifier}))
+        if (deduceLiteralType(token_type) != TispDataType::unknown)
         {
-            return parseLiteral({.outer = TispDataType::tbd, .inner = TispDataType::tbd});
+            return parseLiteral({.outer = deduceLiteralType(token_type), .inner = TispDataType::unknown});
         }
-        else if (!matchCurrent({TokenType::op_invoke, TokenType::op_minus, TokenType::op_access}))
-        {
-            error_count++;
-            throw std::runtime_error {stringifyParseError( peekCurrent(), construct, "Invalid unary operator.")};
-        }
-
-        consumeToken({});
 
         TispOp op;
 
@@ -264,23 +259,27 @@ namespace tisp::frontend
                 op = TispOp::access;
                 break;
             default:
-                error_count++;
-                throw std::runtime_error {stringifyParseError(peekCurrent(), construct, "Unreachable logic hit!")};
+                op = TispOp::nop;
+                break;
         }
 
         std::vector<std::unique_ptr<Expr>> x_argv {};
 
         if (op == TispOp::minus)
         {
-            consumeToken({TokenType::identifier});
+            consumeToken({});
+
+            x_argv.emplace_back(parseExpr());
 
             return std::make_unique<TispUnary>(std::move(x_argv), getLexeme(peekPrevious(), source), op);
         }
 
+        consumeToken({});
         consumeToken({TokenType::lparen});
-        consumeToken({TokenType::identifier});
 
-        auto x_identifier = getLexeme(peekPrevious(), source);
+        auto x_identifier = getLexeme(peekCurrent(), source);
+
+        consumeToken({TokenType::identifier});
 
         while (!isAtEOS())
         {
@@ -341,37 +340,37 @@ namespace tisp::frontend
     {
         construct = SyntaxConstruct::ex_compare;
         auto lhs = parseTerm();
-
-        consumeToken({TokenType::op_equ, TokenType::op_neq, TokenType::op_gt, TokenType::op_gte, TokenType::op_lt, TokenType::op_lte});
-
         TispOp cmp_op;
 
-        switch (peekPrevious().type)
-        {
-            case TokenType::op_equ:
-                cmp_op = TispOp::equality;
-                break;
-            case TokenType::op_neq:
-                cmp_op = TispOp::inequality;
-                break;
-            case TokenType::op_gt:
-                cmp_op = TispOp::greater;
-                break;
-            case TokenType::op_gte:
-                cmp_op = TispOp::atleast;
-                break;
-            case TokenType::op_lt:
-                cmp_op = TispOp::lesser;
-                break;
-            case TokenType::op_lte:
-            default:
-                cmp_op = TispOp::atmost;
-                break;
+        if (matchCurrent({TokenType::op_equ, TokenType::op_neq, TokenType::op_gt, TokenType::op_gte, TokenType::op_lt, TokenType::op_lte})) {
+            switch (peekPrevious().type) {
+                case TokenType::op_equ:
+                    cmp_op = TispOp::equality;
+                    break;
+                case TokenType::op_neq:
+                    cmp_op = TispOp::inequality;
+                    break;
+                case TokenType::op_gt:
+                    cmp_op = TispOp::greater;
+                    break;
+                case TokenType::op_gte:
+                    cmp_op = TispOp::atleast;
+                    break;
+                case TokenType::op_lt:
+                    cmp_op = TispOp::lesser;
+                    break;
+                case TokenType::op_lte:
+                default:
+                    cmp_op = TispOp::atmost;
+                    break;
+            }
+
+            auto rhs = parseTerm();
+
+            lhs = std::make_unique<TispBinary>(std::move(lhs), std::move(rhs), cmp_op);
         }
 
-        auto rhs = parseTerm();
-
-        return std::make_unique<TispBinary>(std::move(lhs), std::move(rhs), cmp_op);
+        return lhs;
     }
 
     std::unique_ptr<Expr> Parser::parseConditional()
@@ -480,9 +479,10 @@ namespace tisp::frontend
     {
         construct = SyntaxConstruct::st_defun;
         consumeToken({});
-        
+
         auto func_name = getLexeme(peekCurrent(), source);
 
+        consumeToken({TokenType::identifier});
         consumeToken({TokenType::lparen});
 
         std::vector<std::unique_ptr<Stmt>> func_params {};
@@ -539,8 +539,14 @@ namespace tisp::frontend
 
         std::vector<std::unique_ptr<Stmt>> items {};
 
-        while (!matchCurrent({TokenType::rbrace}))
+        while (!isAtEOS())
         {
+            if (matchCurrent({TokenType::rbrace}))
+            {
+                consumeToken({});
+                break;
+            }
+
             auto x_stmt = parseInner();
             items.emplace_back(std::move(x_stmt));
         }
@@ -696,7 +702,7 @@ namespace tisp::frontend
             else
             {
                 error_count++;
-                throw std::runtime_error {stringifyParseError(peekCurrent(), construct, "Unexpected token")};
+                throw std::runtime_error {stringifyParseError(peekCurrent(), construct, "Unexpected token!")};
             }
         }
 
@@ -745,8 +751,8 @@ namespace tisp::frontend
         {
             if (matchCurrent({TokenType::identifier}))
             {
-                consumeToken({});
                 auto part = getLexeme(peekCurrent(), source);
+                consumeToken({});
                 path_parts.emplace_back(std::move(part));
             }
             else if (matchCurrent({TokenType::dot}))
